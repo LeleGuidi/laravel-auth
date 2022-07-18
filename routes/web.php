@@ -19,4 +19,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+Route::middleware('auth')
+    ->namespace('admin') //tutti i controller saranno all'interno del namespace admin
+    ->name('admin.') //il nome della rotta
+    ->prefix('admin') // il prefisso della rotta
+    ->group(function() {
+        Route::get('/home', 'HomeController@index')->name('home');
+    });
+
