@@ -11,6 +11,7 @@
                     <th scope="col">Riassunto</th>
                     <th scope="col">Slug</th>
                     <th scope="col">Pubblico</th>
+                    <th scope="col">Azione</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -20,6 +21,12 @@
                             <td>{{$post['title']}}</td>
                             <td>{{substr($post['content'], 0, 20)}}</td>
                             <td>{{$post['slug']}}</td>
+                            <td>@if ($post['public'] == 1) Si @else No @endif </td>
+                            <td>
+                                <a href="{{route('admin.posts.show', $post->id)}}"><button class="btn btn-primary">Visualizza</button></a>
+                                <a href="{{route('admin.posts.edit', $post->id)}}"><button class="btn btn-secondary">Modifica</button></a>
+                                <form action="{{route('admin.posts.destroy', $post->id)}}" method="Post"> @csrf @method('delete') <input type="submit" class="btn btn-danger" value="Cancella"></form>
+                            </td>
                         </tr> 
                     @endforeach
                 </tbody>
