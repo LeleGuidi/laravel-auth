@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -26,7 +27,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -37,7 +38,20 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'title' => 'required|max:150|string',
+            'content' => 'required|max:65535|string',
+            'public' => 'sometimes|accepted'
+        ]);
+
+        $data = $request->all();
+        $newPost = new Post();
+        $newPost->fill($data);
+        $newPost->slug = $this->getSlug($data['title']);
+        $newPost->public = isset($data['public']);
+
+        return redirect()->route('admin.posts.show', $newPost->id);
     }
 
     /**
@@ -46,9 +60,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('admin.posts.show', compact('post'));
     }
 
     /**
