@@ -17,6 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Auth::routes();
 
 
@@ -26,6 +27,7 @@ Route::middleware('auth')
     ->prefix('admin') // il prefisso della rotta
     ->group(function() {
         Route::get('/home', 'HomeController@index')->name('home');
+        Route::resource('posts', 'PostController');
     });
 
 Route::any("{any?}", function() {
