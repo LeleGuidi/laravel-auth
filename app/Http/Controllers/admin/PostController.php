@@ -50,6 +50,7 @@ class PostController extends Controller
         $newPost->fill($data);
         $newPost->slug = $this->getSlug($data['title']);
         $newPost->public = isset($data['public']);
+        $newPost->save();
 
         return redirect()->route('admin.posts.show', $newPost->id);
     }
@@ -71,9 +72,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -83,9 +84,23 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:150|string',
+            'content' => 'required|max:65535|string',
+            'public' => 'sometimes|accepted'
+        ]);
+
+        $data = $request->all();
+        if( $post->title != $data['title'] ) {
+            $post->slug = $this->getSlug($data['title']);
+        }
+        $post->fill($data);
+        $post->public = isset($data['public']);
+        $post->save();
+
+        return redirect()->route('admin.posts.show', $post->id);
     }
 
     /**
@@ -97,5 +112,17 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function getSlug($title) {
+        $slug = Str::slug($title, '-');
+        $count = 1;
+
+        while( Post::where('slug', $slug)->first() ) {
+            $slug = Str::slug($title, '-') . "-{$count}";
+            $count++;
+        }
+
+        return $slug;
     }
 }
