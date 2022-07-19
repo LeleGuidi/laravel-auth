@@ -1,5 +1,5 @@
 <template>
-    <h1>Ciao guest</h1>
+
 </template>
 
 <script>

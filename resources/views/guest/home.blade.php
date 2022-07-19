@@ -9,6 +9,7 @@
 </head>
 <body>
     <div id="app"></div>
+    <h1>Ciao</h1>
     <script src="{{asset('js/front.js')}}"></script>
 </body>
 </html>
