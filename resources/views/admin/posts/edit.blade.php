@@ -5,6 +5,7 @@
         <h1>Modifica il post</h1>
         <form action="{{route('admin.posts.update', $post->id)}}" method="POST">
             @csrf
+            @method('PUT')
             <div class="form-group">
                 <label for="title">Titolo</label>
                 <input required type="text" class="form-control @error('title') is invalid @enderror" id="title" name="title" value="{{old('title', $post->title)}}">
